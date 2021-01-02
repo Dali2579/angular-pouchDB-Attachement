@@ -19,7 +19,10 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "allowSyntheticDefaultImports": true,    
+  "noImplicitAny": false
+   
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true,
