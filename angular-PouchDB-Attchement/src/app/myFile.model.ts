@@ -6,4 +6,5 @@ export class myFile
     url:SafeUrl=""; 
     type:string="";  
     link:SafeUrl="";
+    size:number=0;
 }

@@ -3,13 +3,20 @@
       <mat-icon matSuffix>folder</mat-icon>
     </mat-form-field>
     <mat-nav-list>
-       
+       <h1>Total files size= {{totalSize}}</h1>
   <mat-list-item *ngFor="let file of myFiles">
     
    <mat-icon mat-list-icon *ngIf="file.type.includes('image')">image</mat-icon>
    <mat-icon mat-list-icon *ngIf="file.type.includes('pdf')">picture_as_pdf</mat-icon>
-   <mat-icon mat-list-icon *ngIf="!file.type.includes('pdf') && !file.type.includes('image') ">insert_drive_file</mat-icon>
-     <a  mat-line [href]="file.link">{{file.name}}</a>
+   <mat-icon mat-list-icon *ngIf="file.type.includes('video')">play_circle</mat-icon>
+   <mat-icon mat-list-icon *ngIf="!file.type.includes('pdf') && !file.type.includes('image') &&!file.type.includes('video')">insert_drive_file</mat-icon>
+   
+     <a mat-line [href]="file.link">{{file.name}}</a>
+     <!-- <video  *ngIf="file.type.includes('video')" width="320" height="240" controls>
+        <source [src]=file.link type="video/mp4">      
+    Your browser does not support the video tag.
+    </video> -->
+     <label>{{file.size}}</label>
      <button mat-icon-button >     
         <mat-icon>info</mat-icon>
      </button>

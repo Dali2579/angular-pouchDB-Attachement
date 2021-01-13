@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { MAT_TOOLTIP_SCROLL_STRATEGY } from '@angular/material/tooltip';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { DataService } from './data.service';
@@ -13,27 +13,82 @@ import { myFile } from './myFile.model';
 export class AppComponent implements OnInit {
   title = 'angular-PouchDB-Attchement';
   myFiles: myFile[]=[];
-  constructor(private data:DataService,private sanitizer: DomSanitizer) {
+  totalSize:number=0;
+  constructor(private data:DataService,private sanitizer: DomSanitizer, private zone: NgZone) {
    
   }
   
   ngOnInit(): void {
-    this.data.fetch().then(response =>{
+    this.data.sync();
+    this.data.getChangeListener().subscribe(data => {
+        for(let i = 0; i < data.change.docs.length; i++) {
+            this.zone.run(() => {
+                let row=data.change.docs[i];
+                let attachments = row['_attachments'];  
+                console.log(row);
+                console.log(attachments);
+                let blob=attachments[Object.keys(attachments)[0]].data;//this.dataURItoBlob('data:' + attachments[Object.keys(attachments)[0]].content_type + ';base64,' + attachments[Object.keys(attachments)[0]].data);
+                let myfile=
+                {              
+                  name:Object.keys(attachments)[0],       
+                  url: this.sanitizer.bypassSecurityTrustUrl('data:' + attachments[Object.keys(attachments)[0]].content_type + ';base64,' + attachments[Object.keys(attachments)[0]].data),
+                  type:attachments[Object.keys(attachments)[0]].content_type,
+                  link:this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blob)),
+                  size:blob.size/1034/1034
+      
+                };
+                //console.log(myfile);
+                this.totalSize+=myfile.size;
+                this.myFiles.push(myfile);       
+            });
+        }
+    });
+    this.data.fetch().then(response => {
+        this.myFiles = [];
         for (let row of response.rows) {     
           let attachments = row.doc['_attachments'];  
-         
+          console.log(row);
+          console.log(attachments);
+          let blob=this.dataURItoBlob('data:' + attachments[Object.keys(attachments)[0]].content_type + ';base64,' + attachments[Object.keys(attachments)[0]].data);
           let myfile=
           {              
             name:Object.keys(attachments)[0],       
             url: this.sanitizer.bypassSecurityTrustUrl('data:' + attachments[Object.keys(attachments)[0]].content_type + ';base64,' + attachments[Object.keys(attachments)[0]].data),
             type:attachments[Object.keys(attachments)[0]].content_type,
-            link:this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(this.dataURItoBlob('data:' + attachments[Object.keys(attachments)[0]].content_type + ';base64,' + attachments[Object.keys(attachments)[0]].data)))
+            link:this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blob)),
+            size:blob.size/1034/1034
+
           };
-          console.log(myfile);
+          //console.log(myfile);
+          this.totalSize+=myfile.size;
+          this.myFiles.push(myfile);            
+        }
+    }, error => {
+        console.error(error);
+    });
+
+
+    /*this.data.fetch().then(response =>{
+        for (let row of response.rows) {     
+          let attachments = row.doc['_attachments'];  
+          console.log(row);
+          console.log(attachments);
+          let blob=this.dataURItoBlob('data:' + attachments[Object.keys(attachments)[0]].content_type + ';base64,' + attachments[Object.keys(attachments)[0]].data);
+          let myfile=
+          {              
+            name:Object.keys(attachments)[0],       
+            url: this.sanitizer.bypassSecurityTrustUrl('data:' + attachments[Object.keys(attachments)[0]].content_type + ';base64,' + attachments[Object.keys(attachments)[0]].data),
+            type:attachments[Object.keys(attachments)[0]].content_type,
+            link:this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blob)),
+            size:blob.size/1034/1034
+
+          };
+          //console.log(myfile);
+          this.totalSize+=myfile.size;
           this.myFiles.push(myfile);            
         }
        
-      });
+      });*/
   }
  
   public dataURItoBlob(dataURI) {
