@@ -63,6 +63,9 @@ THE SOFTWARE.
 @angular/platform-browser
 MIT
 
+@angular/service-worker
+MIT
+
 argsarray
 WTFPL
 # DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE 
