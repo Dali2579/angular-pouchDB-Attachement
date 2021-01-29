@@ -122,6 +122,10 @@
               "devServerTarget": "angular-PouchDB-Attchement:serve:production"
             }
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {}
         }
       }
     }
