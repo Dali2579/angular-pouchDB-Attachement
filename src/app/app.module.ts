@@ -5,6 +5,8 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material/material.module';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -14,7 +16,8 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
     BrowserModule,
     BrowserAnimationsModule,
     MaterialModule,
-    MaterialFileInputModule
+    MaterialFileInputModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]
