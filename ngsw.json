@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1611959394411,
+  "timestamp": 1612258511975,
   "index": "/angular-pouchDB-Attachement/index.html",
   "assetGroups": [
     {
@@ -13,7 +13,7 @@
       "urls": [
         "/angular-pouchDB-Attachement/favicon.ico",
         "/angular-pouchDB-Attachement/index.html",
-        "/angular-pouchDB-Attachement/main.4d602ae0fe032fc77821.js",
+        "/angular-pouchDB-Attachement/main.9acc5bdfcf448d1d6a41.js",
         "/angular-pouchDB-Attachement/manifest.webmanifest",
         "/angular-pouchDB-Attachement/polyfills.114aca99bca85adace90.js",
         "/angular-pouchDB-Attachement/runtime.0e49e2b53282f40c8925.js",
@@ -52,8 +52,8 @@
     "/angular-pouchDB-Attachement/assets/icons/icon-72x72.png": "c457e56089a36952cd67156f9996bc4ce54a5ed9",
     "/angular-pouchDB-Attachement/assets/icons/icon-96x96.png": "3914125a4b445bf111c5627875fc190f560daa41",
     "/angular-pouchDB-Attachement/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
-    "/angular-pouchDB-Attachement/index.html": "f034203930c91839262dbe7238033900b52f4058",
-    "/angular-pouchDB-Attachement/main.4d602ae0fe032fc77821.js": "cf578713c37d789e9c423cd4c8c97fd6ffa36350",
+    "/angular-pouchDB-Attachement/index.html": "3e20dfcf63e6e6806a4180de0dc7d2f31fa6f6ea",
+    "/angular-pouchDB-Attachement/main.9acc5bdfcf448d1d6a41.js": "0e86f5a183b9f2be325ea1522cad650968675e8c",
     "/angular-pouchDB-Attachement/manifest.webmanifest": "ff329bc654c97ccb2c9f25a99c8d0eaee8a0a562",
     "/angular-pouchDB-Attachement/polyfills.114aca99bca85adace90.js": "0e0d5a5f079e971e0046e130687b411af9e285c8",
     "/angular-pouchDB-Attachement/runtime.0e49e2b53282f40c8925.js": "a9aafcf49f49145093fc831efd9b8e2f6c71bb9c",
