@@ -20,77 +20,44 @@ export class AppComponent implements OnInit {
   
   ngOnInit(): void {
     this.data.sync();
-    this.data.getChangeListener().subscribe(data => {
-        for(let i = 0; i < data.change.docs.length; i++) {
-            this.zone.run(() => {
-                let row=data.change.docs[i];
-                let attachments = row['_attachments'];  
-                console.log(row);
-                console.log(attachments);
-                let blob=attachments[Object.keys(attachments)[0]].data;//this.dataURItoBlob('data:' + attachments[Object.keys(attachments)[0]].content_type + ';base64,' + attachments[Object.keys(attachments)[0]].data);
-                let myfile=
-                {              
-                  name:Object.keys(attachments)[0],       
-                  url: this.sanitizer.bypassSecurityTrustUrl('data:' + attachments[Object.keys(attachments)[0]].content_type + ';base64,' + attachments[Object.keys(attachments)[0]].data),
-                  type:attachments[Object.keys(attachments)[0]].content_type,
-                  link:this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blob)),
-                  size:blob.size/1034/1034
-      
-                };
-                //console.log(myfile);
-                this.totalSize+=myfile.size;
-                this.myFiles.push(myfile);       
-            });
-        }
-    });
-    this.data.fetch().then(response => {
-        this.myFiles = [];
-        for (let row of response.rows) {     
-          let attachments = row.doc['_attachments'];  
-          console.log(row);
-          console.log(attachments);
-          let blob=this.dataURItoBlob('data:' + attachments[Object.keys(attachments)[0]].content_type + ';base64,' + attachments[Object.keys(attachments)[0]].data);
-          let myfile=
-          {              
-            name:Object.keys(attachments)[0],       
-            url: this.sanitizer.bypassSecurityTrustUrl('data:' + attachments[Object.keys(attachments)[0]].content_type + ';base64,' + attachments[Object.keys(attachments)[0]].data),
-            type:attachments[Object.keys(attachments)[0]].content_type,
-            link:this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blob)),
-            size:blob.size/1034/1034
-
-          };
-          //console.log(myfile);
-          this.totalSize+=myfile.size;
-          this.myFiles.push(myfile);            
-        }
-    }, error => {
-        console.error(error);
-    });
-
-
-    /*this.data.fetch().then(response =>{
-        for (let row of response.rows) {     
-          let attachments = row.doc['_attachments'];  
-          console.log(row);
-          console.log(attachments);
-          let blob=this.dataURItoBlob('data:' + attachments[Object.keys(attachments)[0]].content_type + ';base64,' + attachments[Object.keys(attachments)[0]].data);
-          let myfile=
-          {              
-            name:Object.keys(attachments)[0],       
-            url: this.sanitizer.bypassSecurityTrustUrl('data:' + attachments[Object.keys(attachments)[0]].content_type + ';base64,' + attachments[Object.keys(attachments)[0]].data),
-            type:attachments[Object.keys(attachments)[0]].content_type,
-            link:this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blob)),
-            size:blob.size/1034/1034
-
-          };
-          //console.log(myfile);
-          this.totalSize+=myfile.size;
-          this.myFiles.push(myfile);            
-        }
-       
-      });*/
+    this.data.onPouchDbChange().on("change", change=>{
+			this.showNewChange(change);
+      });	      
+      this.showFiles();
   }
- 
+
+  showNewChange(data:any): any {
+		this.showFiles();	
+		return null;
+  }
+  
+  showFiles()
+	{
+		this.data.fetch().then(response => {
+      this.myFiles = [];
+      for (let row of response.rows) {     
+        let attachments = row.doc['_attachments'];  
+        console.log(row);
+        console.log(attachments);
+        let blob=this.dataURItoBlob('data:' + attachments[Object.keys(attachments)[0]].content_type + ';base64,' + attachments[Object.keys(attachments)[0]].data);
+        let myfile=
+        {              
+          name:Object.keys(attachments)[0],       
+          url: this.sanitizer.bypassSecurityTrustUrl('data:' + attachments[Object.keys(attachments)[0]].content_type + ';base64,' + attachments[Object.keys(attachments)[0]].data),
+          type:attachments[Object.keys(attachments)[0]].content_type,
+          link:this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blob)),
+          size:blob.size/1034/1034
+
+        };
+        //console.log(myfile);
+        this.totalSize+=myfile.size;
+        this.myFiles.push(myfile);            
+      }
+  }, error => {
+      console.error(error);
+  });
+  }
+  
   public dataURItoBlob(dataURI) {
     // convert base64/URLEncoded data component to raw binary data held in a string
     let byteString;
@@ -117,6 +84,7 @@ export class AppComponent implements OnInit {
         let file = event.target.files[i];
         this.data.addNewFile(file);
       }
+      
     }
   }
 }

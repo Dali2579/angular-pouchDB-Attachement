@@ -19,19 +19,22 @@ export class DataService {
     public  sync() {
      
       var opts = {
-        live: true,
-        since: 'now'
+        live: true
+        
       };
-      this.db.replicate.to(this.remoteCouch);
-      this.db.replicate.from(this.remoteCouch)
-      .on("change", change=>{
-        this.listener.emit(change);
-      })    
-      .on("error", error=>{
-        console.log(JSON.stringify(error));
-      });
+      this.db.sync(this.remoteCouch,opts,this.syncError);    
     }
 
+    syncError(remoteCouch: string, opts: { live: boolean; }, syncError: any) {
+      console.log("sync error");
+    }
+
+    public onPouchDbChange():any{
+		return  this.db.changes({
+			 	since: 'now',
+				live: true
+			 });
+      }
     public addNewFile(file: any) {     
            this.db.putAttachment(new Date().toISOString(), file.name, file, file.type)
            .catch(function (err) {
@@ -42,7 +45,9 @@ export class DataService {
     public fetch():Promise<any>{
         return this.db.allDocs({
             include_docs: true,
-            attachments: true
+            attachments: true,
+           // descending: true
+
           });
     }
 
